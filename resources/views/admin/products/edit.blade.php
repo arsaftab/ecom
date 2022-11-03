@@ -117,7 +117,7 @@
                             <div class="col-md-12">
                                 <h4>Select Colors</h4>
                             </div>
-                            <div class="col-md-12 mb-3">
+                            <div class="prod-clr-div col-md-12 mb-3">
                                 <div class="row">
                                     @foreach($colors as $color)
                                         <div class="col-md-2 p-d border">
@@ -211,6 +211,9 @@
         $( document ).on('click', '.deleteProdColorBtn', function () {
             var product_id = "{{ $product->id }}";
             var prod_color_id = $(this).val();
+            var thisClick = $(this);
+
+            thisClick.closest('.prod-clr-tr').remove();
 
             var data = {
                 'product_id': product_id,
@@ -223,8 +226,10 @@
                 url: "{{ route('prod_clr_dlt') }}",
                 data: data,
                 success: function (response) {
-                    // alert(response.message)
-                    console.log(response.message)
+                    alert(response.message)
+                    // location.reload();
+                    // $('#prod-clr-div').load(location.href + "prod-clr-div");
+                    // console.log(response.message)
                 }
             });
         });
