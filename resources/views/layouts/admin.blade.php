@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="{{asset('admin/css/style.css')}}">
     <!-- endinject -->
     <link rel="shortcut icon" href="{{asset('admin/images/favicon.png')}}" />
-
+    <link rel="stylesheet" href="{{ asset('assets/CSS/bootstrap.min.css') }}">
     @livewireStyles
 
 </head>
@@ -68,6 +68,27 @@
     <script src="{{asset('admin/js/jquery.dataTables.js')}}"></script>
     <script src="{{asset('admin/js/dataTables.bootstrap4.js')}}"></script>
     <!-- End custom js for this page-->
+    <script>
+        $("#isActive").click(function(){
+            
+            var id = $(this).attr('user_id');
+            $.ajax({
+                method: "POST",
+                url: "{{ route('user_active') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    user_id: id,
+                },
+                
+                dataType: "json",
+                success: function(response) {
+                    console.log(response)
+                },
+            });
+        });
+        
+    </script>
+    @yield('scripts')
     @livewireScripts
     @stack('script')
 </body>

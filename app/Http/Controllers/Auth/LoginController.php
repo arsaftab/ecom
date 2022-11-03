@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -31,10 +32,13 @@ class LoginController extends Controller
 
     protected function authenticated()
     {
-        if (Auth::user()->role_as == '1') {
+        if (Auth::user()->role_as == '1' || Auth::user()->is_active == '1') {
             return redirect('admin/dashboard')->with('message', 'Welcome to Dashboar');
         } else {
-            redirect('/home')->with('status', 'Logged in succesfully');
+            Session::flush();
+            Auth::logout();
+            return redirect()->route('welcome')->with('status', 'logout');
+            // redirect('/home')->with('status', 'Logged in succesfully');
         }
     }
 
