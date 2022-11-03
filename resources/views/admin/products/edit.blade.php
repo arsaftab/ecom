@@ -202,8 +202,8 @@
                 url: "{{ route('prod_clr_upd') }}",
                 data: data,
                 success: function (response) {
-                    // alert(response.message)
-                    console.log(response.message)
+                    alert(response.message)
+                    // console.log(response.message)
                 }
             });
         });
@@ -227,7 +227,7 @@
                 data: data,
                 success: function (response) {
                     alert(response.message)
-                    // location.reload();
+                    location.reload();
                     // $('#prod-clr-div').load(location.href + "prod-clr-div");
                     // console.log(response.message)
                 }
