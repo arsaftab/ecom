@@ -235,4 +235,3 @@
         });
     });
 </script>
-@endsection
