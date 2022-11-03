@@ -34,9 +34,9 @@
                             <div class="col-md-6 mb-3">
                                 <label>Select Category</label>
                                 <select name="category_id" id="" class="form-control">
-                                    <option value=""></option>
+                                    <option value="" ></option>
                                     @foreach($categories as $category)
-                                        <option value="{{$category->id}}">{{$category->name}}</option>
+                                        <option value="{{$category->id}}" >{{$category->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -87,21 +87,31 @@
                             <div class="col-md-12">
                                 <h4>Details</h4>
                             </div>
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label>Original Price</label>
                                 <input type="text" name="original_price" class="form-control">
                             </div>
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label>Selling Price</label>
                                 <input type="text" name="selling_price" class="form-control">
                             </div>
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label>Quantity</label>
                                 <input type="text" name="quantity" class="form-control">
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label>Color</label>
-                                <input type="text" name="color" class="form-control">
+                            <div class="col-md-12">
+                                <h4>Select Colors</h4>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <div class="row">
+                                    @foreach($colors as $color)
+                                        <div class="col-md-2 p-d border">
+                                            Color: <input type="checkbox" name="colors[{{$color->id}}]" value="{{$color->id}}" />
+                                            {{$color->name}} <br>
+                                            Quantity: <input type="number" name="color_quantity[{{$color->id}}]" style="width:100px; border:1px solid" />
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                             <div class="col-md-12 mb-3">
                                 <button type="submit" class="btn btn-primary float-end">Save</button>

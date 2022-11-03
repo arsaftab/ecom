@@ -37,4 +37,13 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'category_id','id');
     }
+    /**
+     * Get all of the productColors for the Product
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function productColors()
+    {
+        return $this->hasMany(ProductColor::class, 'product_id', 'id');
+    }
 }

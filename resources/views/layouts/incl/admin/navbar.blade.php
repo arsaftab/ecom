@@ -3,10 +3,10 @@
     <div class="navbar-brand-wrapper d-flex justify-content-center">
       <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">  
         <a class="navbar-brand brand-logo" href="index.html">
-            {{-- <img src="images/logo.svg" alt="logo"/> --}}
+            {{-- <img src="{{asset('admin/images/logo.svg')}}" alt="logo"/> --}}
             Ecommerce
         </a>
-        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/logo-mini.svg" alt="logo"/></a>
+        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{{asset('admin/images/logo-mini.svg')}}" alt="logo"/></a>
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
           <span class="mdi mdi-sort-variant"></span>
         </button>
@@ -35,7 +35,7 @@
             <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
             <a class="dropdown-item">
               <div class="item-thumbnail">
-                  <img src="images/faces/face4.jpg" alt="image" class="profile-pic">
+                  <img src="{{asset('admin/images/faces/face4.jpg')}}" alt="image" class="profile-pic">
               </div>
               <div class="item-content flex-grow">
                 <h6 class="ellipsis font-weight-normal">David Grey
@@ -47,7 +47,7 @@
             </a>
             <a class="dropdown-item">
               <div class="item-thumbnail">
-                  <img src="images/faces/face2.jpg" alt="image" class="profile-pic">
+                  <img src="{{asset('admin/images/faces/face2.jpg')}}" alt="image" class="profile-pic">
               </div>
               <div class="item-content flex-grow">
                 <h6 class="ellipsis font-weight-normal">Tim Cook
@@ -59,7 +59,7 @@
             </a>
             <a class="dropdown-item">
               <div class="item-thumbnail">
-                  <img src="images/faces/face3.jpg" alt="image" class="profile-pic">
+                  <img src="{{asset('admin/images/faces/face3.jpg')}}" alt="image" class="profile-pic">
               </div>
               <div class="item-content flex-grow">
                 <h6 class="ellipsis font-weight-normal"> Johnson
@@ -74,7 +74,7 @@
         <li class="nav-item dropdown me-4">
           <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center notification-dropdown" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
             <i class="mdi mdi-bell mx-0"></i>
-            <span class="count"></span>
+            <span class="count"></span>{{count(auth()->user()->findOrFail(1)->unreadNotifications)}}
           </a>
           <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notificationDropdown">
             <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
@@ -104,24 +104,39 @@
                 </p>
               </div>
             </a>
-            <a class="dropdown-item">
+            {{-- @if(isset($users)) --}}
+            {{-- @foreach($users as $user) --}}
+            
+            @if(is_array(auth()->user()->findOrFail(1)->unreadNotifications) || is_object(auth()->user()->findOrFail(1)->notifications))
+            @foreach(auth()->user()->findOrFail(1)->unreadNotifications as $notification)
+            <a href="{{ route(  $notification->data['url'], [$notification->data['id'], $notification->id]) }}" class="dropdown-item">
               <div class="item-thumbnail">
                 <div class="item-icon bg-info">
                   <i class="mdi mdi-account-box mx-0"></i>
                 </div>
               </div>
               <div class="item-content">
-                <h6 class="font-weight-normal">New user registration</h6>
-                <p class="font-weight-light small-text mb-0 text-muted">
-                  2 days ago
-                </p>
+                <h6 class="font-weight-normal">{{$notification->data['body']}}</h6>
+                <div>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    <label class="checkbox-inline">Name:
+                      {{$notification->data['name']}}
+                      {{-- <input id="isActive" user_id="{{$notification->data['id']}}" type="checkbox" data-bs-toggle="toggle"> --}}
+                    </label><br>
+                    <label>Email: {{$notification->data['email']}}
+                    </label>
+                  </p>
+                </div>
               </div>
             </a>
+            @endforeach 
+            @endif
+            
           </div>
         </li>
         <li class="nav-item nav-profile dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-            <img src="images/faces/face5.jpg" alt="profile"/>
+            <img src="{{asset('admin/images/faces/face5.jpg')}}" alt="profile"/>
             <span class="nav-profile-name">{{ Auth::user()->name }}</span>
           </a>
           <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
