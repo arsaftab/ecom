@@ -114,6 +114,54 @@
                                 <label>Quantity</label>
                                 <input type="text" value="{{$product->quantity}}" name="quantity" class="form-control">
                             </div>
+                            <div class="col-md-12">
+                                <h4>Select Colors</h4>
+                            </div>
+                            <div class="prod-clr-div col-md-12 mb-3">
+                                <div class="row">
+                                    @foreach($colors as $color)
+                                        <div class="col-md-2 p-d border">
+                                            Color: <input type="checkbox" name="colors[{{$color->id}}]" value="{{$color->id}}" />
+                                            {{$color->name}} <br>
+                                            Quantity: <input type="number" name="color_quantity[{{$color->id}}]" style="width:100px; border:1px solid" />
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @if (isset($product->productColors))
+                            <div class="table-resposive">
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th >Color Name</th>
+                                            <th>Quantity</th>
+                                            <th>Operation</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($product->productColors as $productColor)
+                                        <tr class="prod-clr-tr">
+                                            <td class="col-md-5">
+                                                @if ($productColor->colors)
+                                                {{$productColor->colors->name}}</td>
+                                                @else
+                                                <h3>No colors available</h3>
+                                                @endif
+                                            <td>
+                                                <div class="input-group">
+                                                    <input type="text" value="{{$productColor->quantity}}" id="qty" class="prodColorQty form-control form-control-sm" />
+                                                    <button type="button" value="{{$productColor->id}}" class="updateProdColorBtn btn btn-danger btn-sm text-white" >update</button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button type="button" value="{{$productColor->id}}" class="deleteProdColorBtn btn btn-danger btn-sm text-white float-end">Delete</button>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            @endif
                             <div class="col-md-12 mb-3">
                                 <button type="submit" class="btn btn-primary float-end">Update</button>
                             </div>
@@ -125,4 +173,66 @@
         </div>
     </div>
 
+@endsection
+
+@section('scripts')
+<script>
+    $( document ).ready(function() {
+
+        $( document ).on('click', '.updateProdColorBtn', function () {
+            var product_id = "{{ $product->id }}";
+            var prod_color_id = $(this).val();
+            //var qty = $('.prodColorQty').val();
+            var qty = $(this).prev().val();
+
+                if(qty <= 0){
+                    alert('Quantity is required');
+                    return false;
+                }
+
+            var data = {
+                'product_id': product_id,
+                'prod_color_id': prod_color_id,
+                'qty': qty,
+                "_token": "{{ csrf_token() }}",
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('prod_clr_upd') }}",
+                data: data,
+                success: function (response) {
+                    // alert(response.message)
+                    console.log(response.message)
+                }
+            });
+        });
+
+        $( document ).on('click', '.deleteProdColorBtn', function () {
+            var product_id = "{{ $product->id }}";
+            var prod_color_id = $(this).val();
+            var thisClick = $(this);
+
+            thisClick.closest('.prod-clr-tr').remove();
+
+            var data = {
+                'product_id': product_id,
+                'prod_color_id': prod_color_id,
+                "_token": "{{ csrf_token() }}",
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('prod_clr_dlt') }}",
+                data: data,
+                success: function (response) {
+                    alert(response.message)
+                    // location.reload();
+                    // $('#prod-clr-div').load(location.href + "prod-clr-div");
+                    // console.log(response.message)
+                }
+            });
+        });
+    });
+</script>
 @endsection
